@@ -8,22 +8,45 @@
 import UIKit
 
 class PhotoViewController: UIViewController {
-
+    
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var saveButton: UIButton!
+    @IBOutlet var doneButton: UIButton!
+    
+    var image: UIImage?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        setupUI()
+        imageView.image = image
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    private func setupUI() {
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
     }
-    */
-
+    
+    @IBAction func saveImage(_ sender: UIButton) {
+        guard let imageToSave = image else { return }
+        UIImageWriteToSavedPhotosAlbum(imageToSave, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    @IBAction func dismissSelf(_ sender: UIButton) {
+        self.dismiss(animated: true)
+    }
+    
+    
+    @objc private func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        let alert = UIAlertController(
+            title: nil,
+            message: error == nil ? "Image saved！" : "Error",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            if error == nil {
+                self.dismiss(animated: true)
+            }
+        })
+        present(alert, animated: true)
+    }
 }
