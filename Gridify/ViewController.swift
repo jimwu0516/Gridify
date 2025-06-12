@@ -12,6 +12,8 @@ class ViewController: UIViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var loadingIndicator: UILabel!
+    @IBOutlet var infoButton: UIButton!
+    @IBOutlet var appTitle: UILabel!
     
     @IBOutlet var button4x6: UIButton!
     @IBOutlet var button4x8: UIButton!
@@ -50,7 +52,7 @@ class ViewController: UIViewController {
         
         button8x10.isHidden = isLoading
         button8x12.isHidden = isLoading
-        
+                
         if isLoading {
             activityIndicator.startAnimating()
         } else {
