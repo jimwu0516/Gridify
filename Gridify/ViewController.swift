@@ -52,7 +52,7 @@ class ViewController: UIViewController {
         
         button8x10.isHidden = isLoading
         button8x12.isHidden = isLoading
-                
+        
         if isLoading {
             activityIndicator.startAnimating()
         } else {
@@ -179,33 +179,38 @@ class ViewController: UIViewController {
     }
     
 }
-
 extension ViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         dismiss(animated: true)
         
-        selectedImages = []
-        let itemProviders = results.map { $0.itemProvider }
+        if results.isEmpty {
+            return
+        }
+        
+        selectedImages = Array(repeating: UIImage(), count: results.count)
+        
         let group = DispatchGroup()
         activityIndicator.startAnimating()
         
-        for item in itemProviders {
-            if item.canLoadObject(ofClass: UIImage.self) {
-                group.enter()
-                item.loadObject(ofClass: UIImage.self) { object, error in
-                    if let image = object as? UIImage {
-                        self.selectedImages.append(image)
-                    }
-                    group.leave()
+        for (index, result) in results.enumerated() {
+            let item = result.itemProvider
+            group.enter()
+            item.loadObject(ofClass: UIImage.self) { object, error in
+                if let image = object as? UIImage {
+                    self.selectedImages[index] = image
                 }
+                group.leave()
             }
         }
         
         group.notify(queue: .main) {
-            let expectedCount = self.gridCols * self.gridRows
             self.setLoading(false)
+            let expectedCount = self.gridCols * self.gridRows
             
-            if self.selectedImages.isEmpty {
+            if self.selectedImages.contains(where: { $0.size == .zero}) {
+                let alert = UIAlertController(title: "Error", message: "Some photos failed to load.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
                 return
             }
             
@@ -219,15 +224,11 @@ extension ViewController: PHPickerViewControllerDelegate {
                     }
                 }
             } else {
-                let alert = UIAlertController(title: "Error", message: "Please choose \(expectedCount) photos", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Yes", style: .default))
+                let alert = UIAlertController(title: "Alert!", message: "Please choose \(expectedCount) photos", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true)
             }
         }
-        
-        
-        
+
     }
 }
-
-
