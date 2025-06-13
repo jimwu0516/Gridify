@@ -11,7 +11,6 @@ class PhotoViewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var saveButton: UIButton!
-    @IBOutlet var doneButton: UIButton!
     
     var image: UIImage?
     
@@ -30,11 +29,6 @@ class PhotoViewController: UIViewController {
         guard let imageToSave = image else { return }
         UIImageWriteToSavedPhotosAlbum(imageToSave, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
-    
-    @IBAction func dismissSelf(_ sender: UIButton) {
-        self.dismiss(animated: true)
-    }
-    
     
     @objc private func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         let alert = UIAlertController(
