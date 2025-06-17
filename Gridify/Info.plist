@@ -6,6 +6,8 @@
 	<string>This app needs access to save your finished photo grid back to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app lets you select photos to create a photo grid. We need access to your photo library to enable this functionality.</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
