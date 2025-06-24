@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet var infoButton: UIButton!
     @IBOutlet var appTitle: UILabel!
     
+    @IBOutlet var button4x4: UIButton!
     @IBOutlet var button4x6: UIButton!
     @IBOutlet var button4x8: UIButton!
     @IBOutlet var button4x10: UIButton!
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
         activityIndicator.isHidden = !isLoading
         loadingIndicator.isHidden = !isLoading
         
+        button4x4.isHidden = isLoading
         button4x6.isHidden = isLoading
         button4x8.isHidden = isLoading
         button4x10.isHidden = isLoading
@@ -62,6 +64,9 @@ class ViewController: UIViewController {
     
     @IBAction func gridFormatButtonTapped(_ sender: UIButton) {
         switch sender {
+        case button4x4:
+            gridCols = 4
+            gridRows = 4
         case button4x6:
             gridCols = 4
             gridRows = 6
